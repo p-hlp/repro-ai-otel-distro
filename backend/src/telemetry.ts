@@ -8,7 +8,7 @@ import { ExpressInstrumentation } from "@opentelemetry/instrumentation-express";
 import { HttpInstrumentationConfig } from "@opentelemetry/instrumentation-http";
 import { MongoDBInstrumentationConfig } from "@opentelemetry/instrumentation-mongodb";
 import { Resource } from "@opentelemetry/resources";
-import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { SEMRESATTRS_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 import { IncomingMessage } from "http";
 
 export const intializeTelemetry = () => {
@@ -24,8 +24,7 @@ export const intializeTelemetry = () => {
   };
 
   const customResource = Resource.EMPTY;
-  customResource.attributes[SemanticResourceAttributes.SERVICE_NAME] =
-    "Backend";
+  customResource.attributes[SEMRESATTRS_SERVICE_NAME] = "Backend";
 
   const mongoInstrumentationConfig: MongoDBInstrumentationConfig = {
     enabled: true,
