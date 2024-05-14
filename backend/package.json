@@ -9,13 +9,13 @@
     "dev": "nodemon src/index.ts"
   },
   "dependencies": {
-    "@azure/monitor-opentelemetry": "1.4.0",
+    "@azure/monitor-opentelemetry": "1.5.0",
     "@opentelemetry/api": "1.8.0",
     "@opentelemetry/instrumentation": "0.51.0",
     "@opentelemetry/instrumentation-express": "0.38.0",
     "@opentelemetry/instrumentation-http": "0.51.0",
     "@opentelemetry/instrumentation-mongodb": "0.43.0",
-    "@opentelemetry/resources": "1.24.0",
+    "@opentelemetry/instrumentation-pino": "0.39.0",
     "@opentelemetry/sdk-metrics": "1.24.0",
     "@opentelemetry/sdk-node": "0.51.0",
     "@opentelemetry/sdk-trace-base": "1.24.0",
@@ -27,7 +27,9 @@
     "express": "4.18.2",
     "mongodb": "6.3.0",
     "mongoose": "8.1.1",
-    "typescript": "5.3.3"
+    "pino-http": "10.1.0",
+    "typescript": "5.3.3",
+    "winston": "3.13.0"
   },
   "devDependencies": {
     "@types/cors": "2.8.17",

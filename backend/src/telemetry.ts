@@ -39,6 +39,7 @@ export const intializeTelemetry = () => {
     instrumentationOptions: {
       http: httpInstrumentationConfig,
       mongoDb: mongoInstrumentationConfig,
+      winston: { enabled: true },
     },
   };
 

@@ -6,9 +6,10 @@ import { intializeTelemetry } from "./telemetry";
 intializeTelemetry();
 
 import cors from "cors";
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import { connect } from "mongoose";
+import { errorHandler } from "./errorHandler";
 import { IProduct, Product } from "./product";
 
 const startServer = async () => {
@@ -22,31 +23,54 @@ const startServer = async () => {
 
   await connect(mongoUrl);
 
-  app.get("/products", async (req: Request, res: Response) => {
-    const query = Product.find();
-    const products = await query.exec();
-    const response = products.map((product) => {
-      return {
-        id: product._id,
-        name: product.name,
-      };
-    });
-    res.status(200).send(response);
-  });
+  app.get(
+    "/products",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const query = Product.find();
+        const products = await query.exec();
+        const response = products.map((product) => {
+          return {
+            id: product._id,
+            name: product.name,
+          };
+        });
+        res.status(200).send(response);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 
-  app.post("/products", async (req: Request, res: Response) => {
-    const product = req.body as IProduct;
-    const newProduct = new Product(product);
-    const result = await newProduct.save();
-    res.status(201).json(result._id);
-  });
+  app.post(
+    "/products",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const product = req.body as IProduct;
+        const newProduct = new Product(product);
+        const result = await newProduct.save();
+        res.status(201).json(result._id);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 
-  app.delete("/products/:id", async (req: Request, res: Response) => {
-    const id = req.params.id;
-    const query = Product.deleteOne({ _id: new ObjectId(id) });
-    await query.exec();
-    res.status(204).send();
-  });
+  app.delete(
+    "/products/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const id = req.params.id;
+        // remove last character of id and replace with '1' to simulate a valid ObjectId, id is a 24 character hex string
+        const query = Product.deleteOne({ _id: new ObjectId("1234") });
+        res.status(204).send();
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  app.use(errorHandler);
 
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
